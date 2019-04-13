@@ -1,0 +1,16 @@
+This folder contains files used in the QA process for this project.
+4/10/19 - Testing converting from GPS to KML
+
+Short GPS file test:
+Reads in a shortened GPS file
+Converts to KML
+An expected output for the KML file was manually written
+User compares the output of the function with the manually written file
+Programs used to check similarity: Beyond Compare 4
+Results: no diffs
+
+Repeat Conversion test: test to assure that the same result every time it is run
+Runs the program twice
+User compares the output files to make sure they are the same
+Program used: Beyond Compare 4
+Results: no diffs

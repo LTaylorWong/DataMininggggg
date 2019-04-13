@@ -73,12 +73,31 @@ def main():
     Main program to run the trainer program
     :return: none
     """
+    # short GPS test
     filename = 'KML_Filename.kml'
-    GPSFilename = 'gps.txt'
+    GPSFilename = 'gps_short_test.txt'
     gpsfile = open(GPSFilename, 'r')
     file = open(filename, 'w')
     addHeader(file)
     convert(gpsfile, file)
     addTrailer(file)
+
+    # repeat test
+    filename = 'KML_repeat_test1.kml'
+    GPSFilename = 'gps_repeat_test.txt'
+    gpsfile = open(GPSFilename, 'r')
+    file = open(filename, 'w')
+    addHeader(file)
+    convert(gpsfile, file)
+    addTrailer(file)
+
+    filename = 'KML_repeat_test2.kml'
+    GPSFilename = 'gps_repeat_test.txt'
+    gpsfile = open(GPSFilename, 'r')
+    file = open(filename, 'w')
+    addHeader(file)
+    convert(gpsfile, file)
+    addTrailer(file)
+
 
 main()
