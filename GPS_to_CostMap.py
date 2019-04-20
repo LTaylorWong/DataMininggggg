@@ -21,6 +21,17 @@ def clean_gps_data(file):
         print("END")
 
 
+def top_kml(file):
+    file.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+    file.write('<kml xmlns="http://www.opengis.net/kml/2.2">\n')
+    file.write('<Document>\n')
+
+
+def end_kml(file):
+    file.write('</Document>\n')
+    file.write('</kml>\n')
+
+
 def write_coordinate(coordinate, file, direction):
     """
     writes a coordinate to the kml file
@@ -76,9 +87,11 @@ def main():
     # some test coordinates for file writing
     kml_path = "cost_map.kml"
     with open(kml_path, 'w') as f:
-        write_coordinate((56.4444, 53.666666666), f, "left")
-        write_coordinate((1000.55, 3423423.4), f, "right")
-        write_coordinate((107.46333, 45.3424543339), f, "stop")
+        top_kml(f)
+        write_coordinate((-77.59, 43.13), f, "left")
+        write_coordinate((-77.50, 43.10), f, "right")
+        write_coordinate((-77.60, 43.12), f, "stop")
+        end_kml(f)
 
 
 if __name__ == '__main__':
