@@ -55,7 +55,9 @@ def convert(gpsfile):
             lat = lat[1]
             alt = arr[2].split('=')
             alt = alt[1]
-            coordinates.append([lng,lat, alt])
+            speed = arr[3].split('=')
+            speed = speed[1]
+            coordinates.append([float(lng), float(lat), float(alt), float(speed)])
 
     return coordinates
 

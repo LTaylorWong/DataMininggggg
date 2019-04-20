@@ -10,16 +10,48 @@ import GPS_to_KML
 def clean_gps_data(gps_file):
     """
     cleans and parses the gps data
-    :param file: file pointer to gps data
+    :param gps_file: file pointer to gps data
     :return: cleaned data
     """
 
-    coordinate_file = "coordinate.txt"
-
     gps_f = open(gps_file)
-    coordinate_f = open(coordinate_file, 'w')
+    coordinates = GPS_to_KML.convert(gps_f)
+    gps_f.close()
+    cleaned = []
+    for i in range(0, len(coordinates), 10):
+        cleaned.append(coordinates[i])
+    return cleaned
 
-    GPS_to_KML.convert(gps_f, coordinate_f)
+
+def classify_coordinates(coordinates):
+
+    classified_coordinates = []
+    for i in range(1, len(coordinates) - 1):
+        lng = coordinates[i][0]
+        lon = coordinates[i][1]
+        speed = coordinates[i][3]
+
+        prev_lng = coordinates[i - 1][0]
+        prev_lon = coordinates[i - 1][1]
+        prev_speed = coordinates[i - 1][3]
+
+        next_lng = coordinates[i - 1][0]
+        next_lon = coordinates[i - 1][1]
+        next_speed = coordinates[i - 1][3]
+
+        lng_threshold = abs(lng - prev_lng) <= 0.0005 and abs(lng - next_lng) <= 0.0005
+        lon_threshold = abs(lon - prev_lon) <= 0.0005 and abs(lon - next_lon) <= 0.0005
+        speed_threshold = speed <= 0.1 and prev_speed <= 0.1 and next_speed <= 0.1
+
+        if lng_threshold and lon_threshold and speed_threshold:
+            if len(classified_coordinates) > 0:
+                last = classified_coordinates[len(classified_coordinates) - 1]
+                if last[0][0] != lng and last[0][1] != lon:
+                    classified_coordinates.append([(lng, lon), 's'])
+            else:
+                classified_coordinates.append([(lng, lon), 's'])
+
+    return classified_coordinates
 
 
 def top_kml(file):
@@ -84,10 +116,10 @@ def write_coordinate(coordinate, file, direction):
 
     file.write("<Placemark>\n")
 
-    if direction == 'left':
+    if direction == 'l':
         file.write(indent + "<description> Red Pin for left turn </description>\n")
         file.write(indent + '<styleUrl>#redLeftMark</styleUrl>\n')
-    elif direction == 'right':
+    elif direction == 'r':
         file.write(indent + "<description> Green Pin for right turn </description>\n")
         file.write(indent + '<styleUrl>#greenRightMark</styleUrl>\n')
     else:
@@ -107,14 +139,17 @@ def main():
     #     clean_gps_data(f)
 
     # some test coordinates for file writing
-    gps_file = 'gps_1.txt'
+    gps_file = 'gps.txt'
 
-    clean_gps_data(gps_file)
+    coors = clean_gps_data(gps_file)
+
+    classified = classify_coordinates(coors)
 
     kml_path = "cost_map.kml"
     with open(kml_path, 'w') as f:
         top_kml(f)
-
+        for c in classified:
+            write_coordinate(c[0], f, c[1])
         end_kml(f)
 
 
