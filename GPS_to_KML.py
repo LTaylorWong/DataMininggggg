@@ -39,8 +39,8 @@ def addHeader(filename):
     header += '\t\t<coordinates>\n'
     filename.write(header)
 
-def convert(gpsfile, file):
-    coordinates = ''
+def convert(gpsfile):
+    coordinates = []
     for line in gpsfile:
         if(line.startswith('lng')):
             arr = line.split(',')
@@ -50,8 +50,13 @@ def convert(gpsfile, file):
             lat = lat[1]
             alt = arr[2].split('=')
             alt = alt[1]
-            coordinates += '\t\t\t' + str(lng) + ',' + str(lat) + ',' + str(alt)+'\n'
-    file.write(coordinates)
+            coordinates.append([lng,lat, alt])
+
+    return coordinates
+
+def write_coordinates(coordinate_lst, file):
+    for coordinate in coordinate_lst:
+        file.write("\t\t\t" + str(coordinate[0]) + "," + str(coordinate[1]) + "," + str(coordinate[2]) +'\n')
 
 def addTrailer(file):
     """
@@ -73,12 +78,15 @@ def main():
     Main program to run the trainer program
     :return: none
     """
-    filename = 'KML_Filename.kml'
+    # filename = 'KML_Filename.kml'
+    filename = 'test.kml'
     GPSFilename = 'gps.txt'
     gpsfile = open(GPSFilename, 'r')
     file = open(filename, 'w')
     addHeader(file)
-    convert(gpsfile, file)
+    coordinate_lst = convert(gpsfile)
+    write_coordinates(coordinate_lst, file)
     addTrailer(file)
+    file.close()
 
 main()

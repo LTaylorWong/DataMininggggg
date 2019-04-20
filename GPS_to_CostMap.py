@@ -4,21 +4,22 @@ names: Rachael Bogdany
        Shannon Quinn
        Lian Wong
 """
+import GPS_to_KML
 
 
-def clean_gps_data(file):
+def clean_gps_data(gps_file):
     """
     cleans and parses the gps data
     :param file: file pointer to gps data
     :return: cleaned data
     """
 
-    for _ in range(5):
-        next(file)
+    coordinate_file = "coordinate.txt"
 
-    for i in file:
-        print(i)
-        print("END")
+    gps_f = open(gps_file)
+    coordinate_f = open(coordinate_file, 'w')
+
+    GPS_to_KML.convert(gps_f, coordinate_f)
 
 
 def top_kml(file):
@@ -54,9 +55,8 @@ def top_kml(file):
             file.write(
                 indent * 2 + half_indent + '<href>http://maps.google.com/mapfiles/kml/paddle/ylw-stars.png</href>\n')
 
-
         file.write(indent * 2 + '</Icon>\n')
-        file.write(half_indent + indent +'</IconStyle>\n')
+        file.write(half_indent + indent + '</IconStyle>\n')
         file.write(indent + '</Style>\n')
 
 
@@ -94,7 +94,6 @@ def write_coordinate(coordinate, file, direction):
         file.write(indent + "<description> Yellow Pin for stop </description>\n")
         file.write(indent + '<styleUrl>#yellowStopMark</styleUrl>\n')
 
-
     file.write(indent + "<Point>\n")
     file.write(indent * 2)
     file.write("<coordinates>%f,%f</coordinates>\n" % (coordinate[0], coordinate[1]))
@@ -108,12 +107,14 @@ def main():
     #     clean_gps_data(f)
 
     # some test coordinates for file writing
+    gps_file = 'gps_1.txt'
+
+    clean_gps_data(gps_file)
+
     kml_path = "cost_map.kml"
     with open(kml_path, 'w') as f:
         top_kml(f)
-        write_coordinate((-77.59, 43.13), f, "left")
-        write_coordinate((-77.58, 43.10), f, "right")
-        write_coordinate((-77.60, 43.12), f, "stop")
+
         end_kml(f)
 
 
