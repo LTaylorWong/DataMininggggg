@@ -139,7 +139,7 @@ def main():
     #     clean_gps_data(f)
 
     # some test coordinates for file writing
-    gps_file = 'gps.txt'
+    gps_file = 'data/gps_1.txt'
 
     coors = clean_gps_data(gps_file)
 
