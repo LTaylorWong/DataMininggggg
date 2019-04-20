@@ -40,6 +40,11 @@ def addHeader(filename):
     filename.write(header)
 
 def convert(gpsfile):
+    """
+    takes a gps file and coverts the points to a list
+    :param gpsfile: gps file pointer
+    :return: list of coordinates
+    """
     coordinates = []
     for line in gpsfile:
         if(line.startswith('lng')):
@@ -55,6 +60,12 @@ def convert(gpsfile):
     return coordinates
 
 def write_coordinates(coordinate_lst, file):
+    """
+    writes a list of coordinates to a kml file
+    :param coordinate_lst: list of coordinates to write to the file
+    :param file: kml file pointer
+    :return: None
+    """
     for coordinate in coordinate_lst:
         file.write("\t\t\t" + str(coordinate[0]) + "," + str(coordinate[1]) + "," + str(coordinate[2]) +'\n')
 
@@ -78,8 +89,7 @@ def main():
     Main program to run the trainer program
     :return: none
     """
-    # filename = 'KML_Filename.kml'
-    filename = 'test.kml'
+    filename = 'KML_Filename.kml'
     GPSFilename = 'gps.txt'
     gpsfile = open(GPSFilename, 'r')
     file = open(filename, 'w')
