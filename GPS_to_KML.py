@@ -57,7 +57,9 @@ def convert(gpsfile):
             alt = alt[1]
             speed = arr[3].split('=')
             speed = speed[1]
-            coordinates.append([float(lng), float(lat), float(alt), float(speed)])
+            ang = arr[5].split('=')
+            ang = ang[1]
+            coordinates.append([float(lng), float(lat), float(alt), float(speed), float(ang)])
 
     return coordinates
 
@@ -92,7 +94,7 @@ def main():
     :return: none
     """
     filename = 'KML_Filename.kml'
-    GPSFilename = 'gps.txt'
+    GPSFilename = 'data/gps_1.txt'
     gpsfile = open(GPSFilename, 'r')
     file = open(filename, 'w')
     addHeader(file)

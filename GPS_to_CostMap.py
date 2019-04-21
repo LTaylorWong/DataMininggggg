@@ -35,9 +35,9 @@ def classify_coordinates(coordinates):
         prev_lon = coordinates[i - 1][1]
         prev_speed = coordinates[i - 1][3]
 
-        next_lng = coordinates[i - 1][0]
-        next_lon = coordinates[i - 1][1]
-        next_speed = coordinates[i - 1][3]
+        next_lng = coordinates[i + 1][0]
+        next_lon = coordinates[i + 1][1]
+        next_speed = coordinates[i + 1][3]
 
         lng_threshold = abs(lng - prev_lng) <= 0.0005 and abs(lng - next_lng) <= 0.0005
         lon_threshold = abs(lon - prev_lon) <= 0.0005 and abs(lon - next_lon) <= 0.0005
@@ -50,6 +50,19 @@ def classify_coordinates(coordinates):
                     classified_coordinates.append([(lng, lon), 's'])
             else:
                 classified_coordinates.append([(lng, lon), 's'])
+        #Attempt to find turns, this needs to be improved though
+        try:
+            turn_ang_before = coordinates[i + 1][4]
+            turn_ang_after = coordinates[i][4]
+            if abs(turn_ang_after - turn_ang_before) > 80:
+                if len(classified_coordinates) > 0:
+                    last = classified_coordinates[len(classified_coordinates) - 1]
+                    if last[0][0] != lng and last[0][1] != lon:
+                        classified_coordinates.append([(lng, lon), 'l'])
+                else:
+                    classified_coordinates.append([(lng, lon), 'l'])
+        except:
+            pass
 
     return classified_coordinates
 
