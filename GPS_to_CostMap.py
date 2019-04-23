@@ -46,11 +46,11 @@ def classify_coordinates(coordinates):
         if lng_threshold and lon_threshold and speed_threshold:
             if len(classified_coordinates) > 0:
                 last = classified_coordinates[len(classified_coordinates) - 1]
-                if last[0][0] != lng and last[0][1] != lon:
+                if abs(float(last[0][0]) - lng) >= 0.001 or abs(float(last[0][1]) - lon) >= 0.001:
                     classified_coordinates.append([(lng, lon), 's'])
             else:
                 classified_coordinates.append([(lng, lon), 's'])
-        #Attempt to find turns, this needs to be improved though
+        # Attempt to find turns, this needs to be improved though
         try:
             turn_ang_before = coordinates[i + 1][4]
             turn_ang_after = coordinates[i][4]
