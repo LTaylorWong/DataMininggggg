@@ -44,27 +44,36 @@ def classify_coordinates(coordinates):
         speed_threshold = speed <= 0.1 and prev_speed <= 0.1 and next_speed <= 0.1
 
         if lng_threshold and lon_threshold and speed_threshold:
-            if len(classified_coordinates) > 0:
-                last = classified_coordinates[len(classified_coordinates) - 1]
-                if abs(float(last[0][0]) - lng) >= 0.001 or abs(float(last[0][1]) - lon) >= 0.001:
-                    classified_coordinates.append([(lng, lon), 's'])
-            else:
-                classified_coordinates.append([(lng, lon), 's'])
+            redundant_data_check(lng, lon, classified_coordinates, 's')
+
         # Attempt to find turns, this needs to be improved though
-        try:
-            turn_ang_before = coordinates[i + 1][4]
-            turn_ang_after = coordinates[i][4]
-            if abs(turn_ang_after - turn_ang_before) > 80:
-                if len(classified_coordinates) > 0:
-                    last = classified_coordinates[len(classified_coordinates) - 1]
-                    if last[0][0] != lng and last[0][1] != lon:
-                        classified_coordinates.append([(lng, lon), 'l'])
-                else:
-                    classified_coordinates.append([(lng, lon), 'l'])
-        except:
-            pass
+        turn_ang_before = coordinates[i - 1][4]
+        turn_ang_after = coordinates[i][4]
+        # print(turn_ang_after - turn_ang_before)
+        if turn_ang_after - turn_ang_before >= 65:
+            redundant_data_check(lng, lon, classified_coordinates, 'r')
+        elif turn_ang_after - turn_ang_before <= -65:
+            redundant_data_check(lng, lon, classified_coordinates, 'l')
 
     return classified_coordinates
+
+
+def redundant_data_check(lng, lon, classified, type):
+    """
+    checks if a data point within a certain threshold has already been classified in the set
+    helps to avoid writing too many points in one spot if they were there too long
+    :param lng:
+    :param lon:
+    :param classified:
+    :param type:
+    :return:
+    """
+    if len(classified) > 0:
+        last = classified[len(classified) - 1]
+        if abs(float(last[0][0]) - lng) >= 0.001 or abs(float(last[0][1]) - lon) >= 0.001 :
+            classified.append([(lng, lon), type])
+    else:
+        classified.append([(lng, lon), type])
 
 
 def top_kml(file):

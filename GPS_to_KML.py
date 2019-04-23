@@ -94,7 +94,7 @@ def main():
     :return: none
     """
     filename = 'KML_Filename.kml'
-    GPSFilename = 'data/gps_3.txt'
+    GPSFilename = 'data/gps_1.txt'
     gpsfile = open(GPSFilename, 'r')
     file = open(filename, 'w')
     addHeader(file)
