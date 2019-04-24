@@ -17,21 +17,42 @@ def clean_gps_data(data):
     i = 0
     for d in data:
         gga = d[0]
-        coords = d[1]
+        coordinate = d[1]
         fix = int(gga[1])
         precision = gga[2]
         if (fix <= 2 and fix != 0) and (float(precision) <= 4 and float(precision) != 0):
-            coords.append(gga[0])
+            coordinate.append(gga[0])
             if i % 10 == 0:
-                cleaned.append(coords)
+                cleaned.append(coordinate)
+                # 79494 7917
+                clean_redundant(cleaned, coordinate)
         i += 1
     print(len(data), len(cleaned))
     return cleaned
 
 
+def clean_redundant(cleaned, coordinate):
+    if len(cleaned) > 0:
+        last = cleaned[len(cleaned) - 1]
+        lng = coordinate[0]
+        lon = coordinate[1]
+        if abs(last[0] - lng) >= 0.001 or abs(last[1] - lon) >= 0.001:
+                cleaned.append(coordinate)
+    else:
+        cleaned.append(coordinate)
+
+
 def classify_coordinates(coordinates):
+    """
+    classifies where stops, left turns and right turns occurred
+    :param coordinates: list of coordinates
+    :return: list of classified points
+    """
 
     classified_coordinates = []
+    right_class = []
+    left_class = []
+
     for i in range(1, len(coordinates) - 1):
         lng = coordinates[i][0]
         lon = coordinates[i][1]
@@ -41,29 +62,28 @@ def classify_coordinates(coordinates):
         prev_lon = coordinates[i - 1][1]
         prev_speed = coordinates[i - 1][3]
 
-
         next_lng = coordinates[i + 1][0]
         next_lon = coordinates[i + 1][1]
         next_speed = coordinates[i + 1][3]
-
 
         lng_threshold = abs(lng - prev_lng) <= 0.0005 and abs(lng - next_lng) <= 0.0005
         lon_threshold = abs(lon - prev_lon) <= 0.0005 and abs(lon - next_lon) <= 0.0005
         speed_threshold = speed <= 0.1 and prev_speed <= 0.1 and next_speed <= 0.1
 
         if lng_threshold and lon_threshold and speed_threshold:
-            print("Classified stop at", lng, lon, speed)
+            # print("Classified stop at", lng, lon, speed)
             redundant_data_check(lng, lon, classified_coordinates, 's')
 
-        # Attempt to find turns, this needs to be improved though
         turn_ang_before = coordinates[i - 1][4]
-        turn_ang_after = coordinates[i][4]
-        # print(turn_ang_after - turn_ang_before)
+        turn_ang_after = coordinates[i + 1][4]
         answer = turn_ang_after - turn_ang_before
-        if answer >= 65:
+
+        if answer >= 65 and answer <= 115:
             print("Classified right", answer, turn_ang_before, turn_ang_after)
+            right_class.append([(lng, lon), 'r'])
             redundant_data_check(lng, lon, classified_coordinates, 'r')
-        elif answer <= -65:
+        elif answer <= -65 and answer >= -120:
+            left_class.append([(lng, lon), 'l'])
             redundant_data_check(lng, lon, classified_coordinates, 'l')
             print("Classified left", answer, turn_ang_before, turn_ang_after)
 
@@ -74,16 +94,17 @@ def redundant_data_check(lng, lon, classified, group):
     """
     checks if a data point within a certain threshold has already been classified in the set
     helps to avoid writing too many points in one spot if they were there too long
-    :param lng:
-    :param lon:
-    :param classified:
-    :param group:
-    :return:
+    :param lng: current longitude
+    :param lon: current longitude
+    :param classified: list of points already classified
+    :param group: classification
+    :return: None
     """
     if len(classified) > 0:
         last = classified[len(classified) - 1]
-        if abs(float(last[0][0]) - lng) >= 0.001 or abs(float(last[0][1]) - lon) >= 0.001 and group != last[1]:
-            classified.append([(lng, lon), group])
+        if (abs(float(last[0][0]) - lng) >= 0.001 or abs(float(last[0][1]) - lon) >= 0.001) and group != last[1]:
+                classified.append([(lng, lon), group])
+
     else:
         classified.append([(lng, lon), group])
 
