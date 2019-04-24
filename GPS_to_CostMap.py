@@ -15,11 +15,17 @@ def clean_gps_data(gps_file):
     """
 
     gps_f = open(gps_file)
-    coordinates = GPS_to_KML.convert(gps_f)
+    data = GPS_to_KML.convert(gps_f)
     gps_f.close()
     cleaned = []
-    for i in range(0, len(coordinates), 10):
-        cleaned.append(coordinates[i])
+    for d in data:
+        rmc = d[0]
+        gga = d[1]
+        coords = d[2]
+
+
+
+
     return cleaned
 
 

@@ -7,8 +7,7 @@
 # Description:
 #
 
-import pandas as pd
-import math
+import numpy as np
 
 def addHeader(filename):
     """
@@ -39,6 +38,9 @@ def addHeader(filename):
     header += '\t\t<coordinates>\n'
     filename.write(header)
 
+
+
+
 def convert(gpsfile):
     """
     takes a gps file and coverts the points to a list
@@ -46,8 +48,20 @@ def convert(gpsfile):
     :return: list of coordinates
     """
     coordinates = []
+    lst = []
     for line in gpsfile:
-        if(line.startswith('lng')):
+        if line.startswith('$GPGGA'):
+            # get time, fix signal and dilution of precision
+            arr = line.split(',')
+            if arr[2] == '' or arr[6] == '' or arr[8] == '':
+                lst.append([])
+
+            else:
+                data = [arr[2], arr[6], arr[8]]
+                lst.append(data)
+
+        elif line.startswith('lng'):
+            # get longitude, latitude, altitude, speed, angle
             arr = line.split(',')
             lng = arr[0].split('=')
             lng = lng[1]
@@ -59,8 +73,14 @@ def convert(gpsfile):
             speed = speed[1]
             ang = arr[5].split('=')
             ang = ang[1]
-            coordinates.append([float(lng), float(lat), float(alt), float(speed), float(ang)])
+            lst.append([float(lng), float(lat), float(alt), float(speed), float(ang)])
+            if len(lst) == 2 :
+                coordinates.append(lst)
+            lst = []
 
+
+
+    # print(len(coordinates))
     return coordinates
 
 def write_coordinates(coordinate_lst, file):
@@ -70,7 +90,9 @@ def write_coordinates(coordinate_lst, file):
     :param file: kml file pointer
     :return: None
     """
-    for coordinate in coordinate_lst:
+
+    for data in coordinate_lst:
+        coordinate = data[1]
         file.write("\t\t\t" + str(coordinate[0]) + "," + str(coordinate[1]) + "," + str(coordinate[2]) +'\n')
 
 def addTrailer(file):
