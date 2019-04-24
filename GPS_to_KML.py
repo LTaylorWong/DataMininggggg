@@ -7,7 +7,7 @@
 # Description:
 #
 
-import numpy as np
+import GPS_to_CostMap
 
 def addHeader(filename):
     """
@@ -39,8 +39,6 @@ def addHeader(filename):
     filename.write(header)
 
 
-
-
 def convert(gpsfile):
     """
     takes a gps file and coverts the points to a list
@@ -53,12 +51,8 @@ def convert(gpsfile):
         if line.startswith('$GPGGA'):
             # get time, fix signal and dilution of precision
             arr = line.split(',')
-            if arr[2] == '' or arr[6] == '' or arr[8] == '':
-                lst.append([])
-
-            else:
-                data = [arr[2], arr[6], arr[8]]
-                lst.append(data)
+            data = [arr[2], arr[6], arr[8]]
+            lst.append(data)
 
         elif line.startswith('lng'):
             # get longitude, latitude, altitude, speed, angle
@@ -74,14 +68,14 @@ def convert(gpsfile):
             ang = arr[5].split('=')
             ang = ang[1]
             lst.append([float(lng), float(lat), float(alt), float(speed), float(ang)])
-            if len(lst) == 2 :
+
+            # check if a GPGGA line was found, otherwise don't add this point
+            if len(lst) == 2:
                 coordinates.append(lst)
             lst = []
 
-
-
-    # print(len(coordinates))
     return coordinates
+
 
 def write_coordinates(coordinate_lst, file):
     """
@@ -91,15 +85,13 @@ def write_coordinates(coordinate_lst, file):
     :return: None
     """
 
-    for data in coordinate_lst:
-        coordinate = data[1]
-        file.write("\t\t\t" + str(coordinate[0]) + "," + str(coordinate[1]) + "," + str(coordinate[2]) +'\n')
+    for c in coordinate_lst:
+        file.write("\t\t\t" + str(c[0]) + "," + str(c[1]) + "," + str(c[2]) + '\n')
+
 
 def addTrailer(file):
     """
     Adds the loop to the file that contains the classifier program
-    :param bestAttribute: str
-    :param value: int
     :param file: file
     :return: none
     """
@@ -110,19 +102,22 @@ def addTrailer(file):
     program += '</kml>\n'
     file.write(program)
 
+
 def main():
     """
     Main program to run the trainer program
     :return: none
     """
     filename = 'KML_Filename.kml'
-    GPSFilename = 'data/gps_1.txt'
-    gpsfile = open(GPSFilename, 'r')
+    gps_filename = 'data/gps_2.txt'
+    gpsfile = open(gps_filename, 'r')
     file = open(filename, 'w')
     addHeader(file)
     coordinate_lst = convert(gpsfile)
-    write_coordinates(coordinate_lst, file)
+    cleaned = GPS_to_CostMap.clean_gps_data(coordinate_lst)
+    write_coordinates(cleaned, file)
     addTrailer(file)
     file.close()
 
-main()
+if __name__ == '__main__':
+    main()

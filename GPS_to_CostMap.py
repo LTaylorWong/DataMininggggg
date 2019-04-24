@@ -7,24 +7,30 @@ names: Rachael Bogdany
 import GPS_to_KML
 
 
-def clean_gps_data(gps_file):
+def clean_gps_data(data):
     """
     cleans and parses the gps data
     :param gps_file: file pointer to gps data
     :return: cleaned data
     """
-
-    gps_f = open(gps_file)
-    data = GPS_to_KML.convert(gps_f)
-    gps_f.close()
+    print(len(data))
     cleaned = []
     for d in data:
-        rmc = d[0]
-        gga = d[1]
-        coords = d[2]
-
-
-
+        gga = d[0]
+        coords = d[1]
+        fix =  int(gga[1])
+        precision = gga[2]
+        if (fix <= 2 and fix != 0) and (float(precision) <= 4 and float(precision) != 0):
+            coords.append(gga[0])
+            # redundant data check
+            if len(cleaned) > 0:
+                lng = coords[0]
+                lon = coords[1]
+                last = cleaned[len(cleaned) - 1]
+                if abs(float(last[0]) - lng) >= 0.0001 or abs(float(last[1]) - lon) >= 0.0001:
+                    cleaned.append(coords)
+            else:
+                cleaned.append(coords)
 
     return cleaned
 
@@ -56,10 +62,13 @@ def classify_coordinates(coordinates):
         turn_ang_before = coordinates[i - 1][4]
         turn_ang_after = coordinates[i][4]
         # print(turn_ang_after - turn_ang_before)
-        if turn_ang_after - turn_ang_before >= 65:
+        answer = turn_ang_after - turn_ang_before
+        if answer >= 65:
+            print("Classified right", answer, turn_ang_before, turn_ang_after)
             redundant_data_check(lng, lon, classified_coordinates, 'r')
-        elif turn_ang_after - turn_ang_before <= -65:
+        elif answer <= -65:
             redundant_data_check(lng, lon, classified_coordinates, 'l')
+            print("Classified left", answer, turn_ang_before, turn_ang_after)
 
     return classified_coordinates
 
@@ -162,14 +171,14 @@ def write_coordinate(coordinate, file, direction):
 
 
 def main():
-    # file = input()
-    # with open(file) as f:
-    #     clean_gps_data(f)
 
-    # some test coordinates for file writing
-    gps_file = 'data/gps_1.txt'
+    gps_file = 'data/gps_2.txt'
 
-    coors = clean_gps_data(gps_file)
+    gps_f = open(gps_file)
+    gps_data = GPS_to_KML.convert(gps_f)
+    gps_f.close()
+
+    coors = clean_gps_data(gps_data)
 
     classified = classify_coordinates(coors)
 
