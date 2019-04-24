@@ -28,14 +28,7 @@ def addHeader(filename):
     header += '\t\t\t<color>7f00ff00</color>\n'
     header += '\t\t</PolyStyle>\n'
     header += '\t</Style>\n'
-    header += '\t<Placemark>\n'
-    header += '\t<styleUrl>#yellowPoly</styleUrl>\n'
-    header += '\t<LineString>\n'
-    header += '\t\t<Description>Speed in Knots, instead of altitude.</Description>\n'
-    header += '\t\t<extrude>1</extrude>\n'
-    header += '\t\t<tesselate>1</tesselate>\n'
-    header += '\t\t<altitudeMode>absolute</altitudeMode>\n'
-    header += '\t\t<coordinates>\n'
+
     filename.write(header)
 
 
@@ -84,10 +77,24 @@ def write_coordinates(coordinate_lst, file):
     :param file: kml file pointer
     :return: None
     """
+    program = ''
+    program += '\t<Placemark>\n'
+    program += '\t<styleUrl>#yellowPoly</styleUrl>\n'
+    program += '\t<LineString>\n'
+    program += '\t\t<Description>Speed in Knots, instead of altitude.</Description>\n'
+    program += '\t\t<extrude>1</extrude>\n'
+    program += '\t\t<tesselate>1</tesselate>\n'
+    program += '\t\t<altitudeMode>absolute</altitudeMode>\n'
+    program += '\t\t<coordinates>\n'
 
     for c in coordinate_lst:
-        file.write("\t\t\t" + str(c[0]) + "," + str(c[1]) + "," + str(c[2]) + '\n')
+        program += ("\t\t\t" + str(c[0]) + "," + str(c[1]) + "," + str(c[2]) + '\n')
 
+    program += '\t\t</coordinates>\n'
+    program += '\t</LineString>\n'
+    program += '\t</Placemark>\n'
+
+    file.write(program)
 
 def addTrailer(file):
     """
@@ -95,9 +102,7 @@ def addTrailer(file):
     :param file: file
     :return: none
     """
-    program = '\t\t</coordinates>\n'
-    program += '\t</LineString>\n'
-    program += '\t</Placemark>\n'
+    program = ''
     program += '</Document>\n'
     program += '</kml>\n'
     file.write(program)
