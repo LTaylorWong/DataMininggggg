@@ -1,16 +1,22 @@
 This folder contains files used in the QA process for this project.
-4/10/19 - Testing converting from GPS to KML
+Testing converting from GPS to KML
 
 Short GPS file test:
 Reads in a shortened GPS file
 Converts to KML
-An expected output for the KML file was manually written
+An expected output for the KML file was manually written: KML_expected_output.kml
 User compares the output of the function with the manually written file
 Programs used to check similarity: Beyond Compare 4
 Results: no diffs
 
 Repeat Conversion test: test to assure that the same result every time it is run
-Runs the program twice
+Runs the program twice: KML_repeat_test1.kml & KML_repeat_test2.kml
 User compares the output files to make sure they are the same
 Program used: Beyond Compare 4
 Results: no diffs
+
+Testing for Checking for Turns & Stops
+An expected output for turns and stops was manually created:cost_map_expected_output.kml
+User compares to the output file: cost_map_out.kml
+Program used: Beyond Compare 4
+Results: diffs found, but expected
