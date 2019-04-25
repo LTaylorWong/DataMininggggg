@@ -24,10 +24,8 @@ def clean_gps_data(data):
             coordinate.append(gga[0])
             if i % 10 == 0:
                 cleaned.append(coordinate)
-                # 79494 7917
-                clean_redundant(cleaned, coordinate)
         i += 1
-    print(len(data), len(cleaned))
+
     return cleaned
 
 
@@ -78,11 +76,11 @@ def classify_coordinates(coordinates):
         turn_ang_after = coordinates[i + 1][4]
         answer = turn_ang_after - turn_ang_before
 
-        if answer >= 65 and answer <= 115:
+        if 65 <= answer <= 115:
             print("Classified right", answer, turn_ang_before, turn_ang_after)
             right_class.append([(lng, lon), 'r'])
             redundant_data_check(lng, lon, classified_coordinates, 'r')
-        elif answer <= -65 and answer >= -120:
+        elif -120 <= answer <= -65:
             left_class.append([(lng, lon), 'l'])
             redundant_data_check(lng, lon, classified_coordinates, 'l')
             print("Classified left", answer, turn_ang_before, turn_ang_after)
@@ -112,16 +110,22 @@ def redundant_data_check(lng, lon, classified, group):
 def top_kml(file):
     """
     writes the header for the cost kml file
+    :param file: kml file pointer
+    :return: None
+    """
+    file.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+    file.write('<kml xmlns="http://www.opengis.net/kml/2.2">\n')
+    file.write('<Document>\n')
+
+
+def write_style(file):
+    """
     adds the style for the different pins needed
     :param file: kml file pointer
     :return: None
     """
     indent = '    '
     half_indent = '  '
-    file.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-    file.write('<kml xmlns="http://www.opengis.net/kml/2.2">\n')
-    file.write('<Document>\n')
-
     for i in range(3):
         if i == 0:
             file.write(indent + "<Style id='redLeftMark'>\n")
@@ -145,16 +149,6 @@ def top_kml(file):
         file.write(indent * 2 + '</Icon>\n')
         file.write(half_indent + indent + '</IconStyle>\n')
         file.write(indent + '</Style>\n')
-
-
-def end_kml(file):
-    """
-    writes end of kml file
-    :param file: kml file pointer
-    :return: None
-    """
-    file.write('</Document>\n')
-    file.write('</kml>\n')
 
 
 def write_coordinate(coordinate, file, direction):
@@ -203,9 +197,19 @@ def main():
     kml_path = "cost_map.kml"
     with open(kml_path, 'w') as f:
         top_kml(f)
+        write_style(f)
         for c in classified:
             write_coordinate(c[0], f, c[1])
-        end_kml(f)
+        GPS_to_KML.addTrailer(f)
+
+    merged_kml = "merged.kml"
+    with open(merged_kml, 'w') as f:
+        GPS_to_KML.addHeader(f)
+        write_style(f)
+        for c in classified:
+            write_coordinate(c[0], f, c[1])
+        GPS_to_KML.write_coordinates(coors, f)
+        GPS_to_KML.addTrailer(f)
 
 
 if __name__ == '__main__':
