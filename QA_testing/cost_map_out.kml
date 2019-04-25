@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document>
+    <Style id='redLeftMark'>
+      <IconStyle>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/paddle/red-stars.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <Style id='greenRightMark'>
+      <IconStyle>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/paddle/grn-stars.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <Style id='yellowStopMark'>
+      <IconStyle>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/paddle/ylw-stars.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+<Placemark>
+    <description> Yellow Pin for stop -77.437705,43.138328 </description>
+    <styleUrl>#yellowStopMark</styleUrl>
+    <Point>
+        <coordinates>-77.437705,43.138328</coordinates>
+    </Point>
+</Placemark>
+<Placemark>
+    <description> Red Pin for left turn, -77.491241,43.145889 </description>
+    <styleUrl>#redLeftMark</styleUrl>
+    <Point>
+        <coordinates>-77.491241,43.145889</coordinates>
+    </Point>
+</Placemark>
+<Placemark>
+    <description> Green Pin for right turn -77.492393,43.133323 </description>
+    <styleUrl>#greenRightMark</styleUrl>
+    <Point>
+        <coordinates>-77.492393,43.133323</coordinates>
+    </Point>
+</Placemark>
+<Placemark>
+    <description> Yellow Pin for stop -77.632728,43.094066 </description>
+    <styleUrl>#yellowStopMark</styleUrl>
+    <Point>
+        <coordinates>-77.632728,43.094066</coordinates>
+    </Point>
+</Placemark>
+<Placemark>
+    <description> Red Pin for left turn, -77.674560,43.092269 </description>
+    <styleUrl>#redLeftMark</styleUrl>
+    <Point>
+        <coordinates>-77.674560,43.092269</coordinates>
+    </Point>
+</Placemark>
+<Placemark>
+    <description> Green Pin for right turn -77.675277,43.089427 </description>
+    <styleUrl>#greenRightMark</styleUrl>
+    <Point>
+        <coordinates>-77.675277,43.089427</coordinates>
+    </Point>
+</Placemark>
+<Placemark>
+    <description> Red Pin for left turn, -77.679069,43.089046 </description>
+    <styleUrl>#redLeftMark</styleUrl>
+    <Point>
+        <coordinates>-77.679069,43.089046</coordinates>
+    </Point>
+</Placemark>
+<Placemark>
+    <description> Green Pin for right turn -77.679161,43.086166 </description>
+    <styleUrl>#greenRightMark</styleUrl>
+    <Point>
+        <coordinates>-77.679161,43.086166</coordinates>
+    </Point>
+</Placemark>
+<Placemark>
+    <description> Red Pin for left turn, -77.679306,43.087631 </description>
+    <styleUrl>#redLeftMark</styleUrl>
+    <Point>
+        <coordinates>-77.679306,43.087631</coordinates>
+    </Point>
+</Placemark>
+<Placemark>
+    <description> Yellow Pin for stop -77.679122,43.092178 </description>
+    <styleUrl>#yellowStopMark</styleUrl>
+    <Point>
+        <coordinates>-77.679122,43.092178</coordinates>
+    </Point>
+</Placemark>
+<Placemark>
+    <description> Green Pin for right turn -77.631263,43.114646 </description>
+    <styleUrl>#greenRightMark</styleUrl>
+    <Point>
+        <coordinates>-77.631263,43.114646</coordinates>
+    </Point>
+</Placemark>
+<Placemark>
+    <description> Red Pin for left turn, -77.540985,43.137443 </description>
+    <styleUrl>#redLeftMark</styleUrl>
+    <Point>
+        <coordinates>-77.540985,43.137443</coordinates>
+    </Point>
+</Placemark>
+<Placemark>
+    <description> Yellow Pin for stop -77.536979,43.137523 </description>
+    <styleUrl>#yellowStopMark</styleUrl>
+    <Point>
+        <coordinates>-77.536979,43.137523</coordinates>
+    </Point>
+</Placemark>
+<Placemark>
+    <description> Red Pin for left turn, -77.492416,43.133220 </description>
+    <styleUrl>#redLeftMark</styleUrl>
+    <Point>
+        <coordinates>-77.492416,43.133220</coordinates>
+    </Point>
+</Placemark>
+<Placemark>
+    <description> Green Pin for right turn -77.492393,43.144172 </description>
+    <styleUrl>#greenRightMark</styleUrl>
+    <Point>
+        <coordinates>-77.492393,43.144172</coordinates>
+    </Point>
+</Placemark>
+<Placemark>
+    <description> Yellow Pin for stop -77.441246,43.141155 </description>
+    <styleUrl>#yellowStopMark</styleUrl>
+    <Point>
+        <coordinates>-77.441246,43.141155</coordinates>
+    </Point>
+</Placemark>
+<Placemark>
+    <description> Green Pin for right turn -77.439422,43.140933 </description>
+    <styleUrl>#greenRightMark</styleUrl>
+    <Point>
+        <coordinates>-77.439422,43.140933</coordinates>
+    </Point>
+</Placemark>
+<Placemark>
+    <description> Yellow Pin for stop -77.437767,43.138320 </description>
+    <styleUrl>#yellowStopMark</styleUrl>
+    <Point>
+        <coordinates>-77.437767,43.138320</coordinates>
+    </Point>
+</Placemark>
+</Document>
+</kml>

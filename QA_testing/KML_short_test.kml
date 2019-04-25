@@ -1,0 +1,27 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<kml xmlns = "http://www.opengis.net/kml/2.2">
+<Document>
+	<Style id = "yellowPoly">
+		<LineStyle>
+			<color> Af00ffff </color>
+			<width>6</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>7f00ff00</color>
+		</PolyStyle>
+	</Style>
+	<Placemark>
+	<styleUrl>#yellowPoly</styleUrl>
+	<LineString>
+		<Description>Speed in Knots, instead of altitude.</Description>
+		<extrude>1</extrude>
+		<tesselate>1</tesselate>
+		<altitudeMode>absolute</altitudeMode>
+		<coordinates>
+			-77.439346,43.140975,157.8
+			-77.439666,43.141078,157.1
+		</coordinates>
+	</LineString>
+	</Placemark>
+</Document>
+</kml>
